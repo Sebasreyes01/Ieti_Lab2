@@ -10,8 +10,15 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import './Login.css'
 
-
 export class Login extends React.Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {user:"", password:""};
+        this.handleUserChange = this.handleUserChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleIsLoggedInChange = this.handleIsLoggedInChange.bind(this);
+    }
 
     render(){
         return (
@@ -26,7 +33,7 @@ export class Login extends React.Component{
                         <form className="form">
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="email">Email Address</InputLabel>
-                                <Input id="email" name="email" autoComplete="email" autoFocus />
+                                <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleUserChange}/>
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="password">Password</InputLabel>
@@ -35,6 +42,7 @@ export class Login extends React.Component{
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    onChange={this.handlePasswordChange}
                                 />
                             </FormControl>
                             <Button
@@ -43,6 +51,7 @@ export class Login extends React.Component{
                                 variant="raised"
                                 color="primary"
                                 className="submit"
+                                onClick={this.handleIsLoggedInChange}
                             >
                                 Sign in
                             </Button>
@@ -51,5 +60,22 @@ export class Login extends React.Component{
                 </main>
             </React.Fragment>
         );
+    }
+
+    handleUserChange(e) {
+        this.setState({user:e.target.value});
+    }
+
+    handlePasswordChange(e) {
+        this.setState({password:e.target.value});
+    }
+
+    handleIsLoggedInChange(e) {
+        if (this.state.user == localStorage.getItem("user") && this.state.password == localStorage.getItem("password")) {
+            localStorage.setItem("isLoggedIn", true);
+        } else {
+            localStorage.setItem("isLoggedIn", false);
+            alert("The user or password is incorrect");
+        }
     }
 }
